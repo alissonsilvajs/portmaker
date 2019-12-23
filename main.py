@@ -8,8 +8,8 @@ from weasyprint import HTML
 env = Environment(loader=FileSystemLoader('.'))
 template = env.get_template("index.html")
 
-gis = GoogleImagesSearch('AIzaSyB4hmYFpThrSIhn8idx94Z67w7zi6VWn6Q', '002280090757924293604:fs75zw78et9')
-client = Algorithmia.client('simNstF6swzH7mgCRl6i9AWP3t91')
+gis = GoogleImagesSearch('YOUR-API-KEY', 'YOUR-CV-KEY')
+client = Algorithmia.client('YOUR-API-KEY')
 
 def searchArticle(article):
 
