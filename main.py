@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+
 import os
+import time
 from termcolor import colored
 from progress.bar import Bar
-import time
 import Algorithmia
 from google_images_search import GoogleImagesSearch
 from progress.bar import ShadyBar
