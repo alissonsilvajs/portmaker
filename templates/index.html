@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="pt-br">
+    <meta charset="UTF-8">
+    <title>Portfólio - {{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Barlow:300,400,500&display=swap" rel="stylesheet"> 
+</head>
+<body>
+    <hr>
+    <h2>Portfólio - {{ title }}</h2>
+    <h3>Alisson Silva - 2º E</h3>
+    <p>DEC 05, 2019 01:32PM</p>
+
+	<div class="container">
+		<div class="content1">
+		    <h1>{{ article0 }}</h1>
+		    <h4>{{ content0 }}</h4>
+		</div>
+		<div class="content2">
+		    <h1>{{ article1 }}</h1>
+		    <h4>{{ content1 }}</h4>
+		</div>
+	</div>
+
+    <hr>
+    <h4>© Copyright 2019. Developed by Alisson Silva</h4>
+</body>
+</html>

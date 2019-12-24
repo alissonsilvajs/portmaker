@@ -1,0 +1,29 @@
+h2{
+	font-family: 'Barlow', sans-serif;
+	font-weight: 700;
+}
+h3{
+	font-family: 'Barlow', sans-serif;
+	font-weight: 300;
+}
+p{
+	font-family: 'Barlow', sans-serif;
+	font-weight: 300;
+	margin-bottom: 20px;
+}
+h1{
+	font-family: 'Barlow', sans-serif;
+	font-weight: 700;
+}
+h4{
+	font-family: 'Barlow', sans-serif;
+	font-weight: 300;
+}
+
+.container{
+	display: flex;
+}
+
+.content2{
+	margin-left: 20px;
+}
