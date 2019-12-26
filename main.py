@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+# Import the libraries
 import os
 import time
 from termcolor import colored
@@ -11,69 +12,24 @@ import json
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
 
+# Open the keys 
 with open('keys/algorithimia.json') as f:
   keyAlgorithimia = json.load(f)
 
 with open('keys/google-search.json') as f:
   keyGoogleSearch = json.load(f)
 
+# Define the key of Google Search Engine
+gis = GoogleImagesSearch(keyGoogleSearch['key'], keyGoogleSearch['cx'])
+
+# Define the key of Algorithmia
+client = Algorithmia.client(keyAlgorithimia['key'])
+
+# Import the template of portfolio
 env = Environment(loader=FileSystemLoader('.'))
 template = env.get_template("templates/index.html")
 
-gis = GoogleImagesSearch(keyGoogleSearch['key'], keyGoogleSearch['cx'])
-client = Algorithmia.client(keyAlgorithimia['key'])
-
-clear = lambda: os.system('clear')
-clear()
-
-print (colored('''
-,-.----.                                                                                          
-\    /  \                         ___              ____                   ,-.                     
-|   :    \                      ,--.'|_          ,'  , `.             ,--/ /|                     
-|   |  .\ :   ,---.    __  ,-.  |  | :,'      ,-+-,.' _ |           ,--. :/ |             __  ,-. 
-.   :  |: |  '   ,'\ ,' ,'/ /|  :  : ' :   ,-+-. ;   , ||           :  : ' /            ,' ,'/ /| 
-|   |   \ : /   /   |'  | |' |.;__,'  /   ,--.'|'   |  || ,--.--.   |  '  /      ,---.  '  | |' | 
-|   : .   /.   ; ,. :|  |   ,'|  |   |   |   |  ,', |  |,/       \  '  |  :     /     \ |  |   ,' 
-;   | |`-' '   | |: :'  :  /  :__,'| :   |   | /  | |--'.--.  .-. | |  |   \   /    /  |'  :  /   
-|   | ;    '   | .; :|  | '     '  : |__ |   : |  | ,    \__\/: . . '  : |. \ .    ' / ||  | '    
-:   ' |    |   :    |;  : |     |  | '.'||   : |  |/     ," .--.; | |  | ' \ \'   ;   /|;  : |    
-:   : :     \   \  / |  , ;     ;  :    ;|   | |`-'     /  /  ,.  | '  : |--' '   |  / ||  , ;    
-|   | :      `----'   ---'      |  ,   / |   ;/        ;  :   .'   \;  |,'    |   :    | ---'     
-`---'.|                          ---`-'  '---'         |  ,     .-./'--'       \   \  /           
-  `---`                                                 `--`---'                `----'            
-''', 'yellow'))                                                                                                                                                                                    
-print(colored('v1.3.0', 'magenta'))
-print('')
-print(colored('github => alissonsilvajs', 'red'))
-print(colored('instagram => alissonsilva.py', 'red'))
-print(colored('All right reserved © Copyright 2019. Developed by Alisson Silva.', 'red'))
-
-print('')
-
-with Bar('Processing', max=20) as bar:
-    for i in range(20):
-        bar.next()
-        time.sleep(.100)
-    pass
-
-bar.finish()
-
-time.sleep(1)
-
-print(colored('Type the topics for portfolio.', 'yellow'))
-array = []
-array = input(colored('Example => Geometria,Aquecimento Global \n> ', 'magenta'))
-array = array.split(',')
-
-print('')
-print(colored(array, 'red'))
-print('')
-sure = input(colored('Are you sure? Y/n \n> ' ,'yellow'))
-
-if (sure == "n" or sure == "N"):
-    exit()
-
-
+# Function for search article on Wikipedia
 def searchArticle(article):
 
     input = {
@@ -82,7 +38,7 @@ def searchArticle(article):
     }
     
     algo = client.algo('web/WikipediaParser/0.1.2')
-    algo.set_options(timeout=300) # optional
+    algo.set_options(timeout=300)
 
     result = algo.pipe(input).result['summary']
 
@@ -117,6 +73,7 @@ def searchArticle(article):
         resultReplaced = cutReplaceA + result[cutLineB:findDot]
     return resultReplaced
 
+# Function for search image of article
 def searchImageArticle(imageArticle):
 
     _search_params = {'q': imageArticle, 'num': 1}
@@ -127,53 +84,80 @@ def searchImageArticle(imageArticle):
 
     return url
 
-maxbar = len(array)
-print('')
-bar = ShadyBar('Processing', max=maxbar)
+def searchArticlesandImages(array):
 
-arrayImage = []
-arrayArticle = []
+    arrayImage = []
+    arrayArticle = []
 
-for x in array:
-    #resultImage = searchImageArticle(x)
-    #arrayImage.append(resultImage)
-    resultArticle = searchArticle(x)
-    arrayArticle.append(resultArticle)
+    arrayBar = len(array)
+    bar = ShadyBar('Processing', max=arrayBar)
 
-    bar.next()
-    pass 
-bar.finish()
-print('')
-portfolio_name = input(colored("What's your name? \n> " ,'yellow'))
-print('')
-portfolio_id = input(colored("How do you want calls this portfolio? \n> " ,'magenta'))
-print('')
-getVars = {
-    'title': portfolio_id,
-    'name': portfolio_name, 
-}
+    for x in array:
+        resultImage = searchImageArticle(x)
+        arrayImage.append(resultImage)
+        resultArticle = searchArticle(x)
+        arrayArticle.append(resultArticle)
 
-lenArray = len(arrayImage)
+        bar.next()
+        pass 
+    bar.finish()
 
-bar = ShadyBar('Generating', max=maxbar)
-for x in range(lenArray): 
+    return arrayArticle, arrayImage 
 
-    content = "content" + str(x)
-    getVars[content] = arrayArticle[x]
-    article = "article" + str(x)
-    getVars[article] = array[x]
-    image = "image" + str(x)
-    getVars[image] = arrayImage[x]  
-    bar.next()
+def generateOutput(name,title,content):
 
-    pass
+    getVars = {
+        'title': title,
+        'name': name,
+    }
 
-bar.finish()
+    print(colored('v1.3.0', 'magenta'))
+    print('')
+    print(colored('github => alissonsilvajs', 'red'))
+    print(colored('instagram => alissonsilva.py', 'red'))
+    print(colored('All right reserved © Copyright 2019. Developed by Alisson Silva.', 'red'))
 
-html_out = template.render(getVars)
-HTML(string=html_out).write_pdf("output/portfolio.pdf")
+    print('')
 
-print('')
+    arrayArticle, arrayImage = searchArticlesandImages(content)
 
-print(colored("Sucessfull!", 'yellow'))
-print(colored('All right reserved © Copyright 2019. Developed by Alisson Silva.', 'magenta'))
+    lenImage = len(content)
+
+    for x in range(lenImage): 
+
+        content = "content" + str(x)
+        getVars[content] = arrayArticle[x]
+        article = "article" + str(x)
+        getVars[article] = content[x]
+        image = "image" + str(x)
+        getVars[image] = arrayImage[x]  
+
+        pass
+
+    html_out = template.render(getVars)
+
+    print(colored("Sucessfull!", 'yellow'))
+    HTML(string=html_out).write_pdf("output/portfolio.pdf")
+
+# Main script
+
+if __name__ == '__main__':
+
+    from optparse import OptionParser
+
+    parser = OptionParser()
+
+    parser.add_option("-n", "--name", dest="name", help="Name")
+    parser.add_option("-t", "--title", dest="title", help="Title")
+    parser.add_option("-c", "--content", dest="content", help="Articles = Geometria,Aquecimento Global")
+
+    options, args = parser.parse_args()
+
+    name = options.name
+    title = options.title
+    content = []
+    content = options.content
+    content = content.split(',')
+
+    generateOutput(name, title, content)
+                                                                                                                                                                           
