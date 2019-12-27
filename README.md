@@ -1,8 +1,8 @@
 # Portmaker
 
-![portmaker](https://raw.githubusercontent.com/alissonsilvajs/portmaker/master/portmakerimg.png)
-
 Bot for create portfolios 📁 
+
+# Usage
 
 # How does it works
 
