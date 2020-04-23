@@ -1,6 +1,6 @@
 # Portmaker
 
-Bot for create portfolios. 📁 
+Bot to create school portfolios. 📁 
 
 # How does it works
 
