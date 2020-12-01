@@ -11,7 +11,7 @@ google-images-download==2.8.0
 Google-Images-Search==1.0.1
 httplib2==0.18.0
 idna==2.8
-Pillow==6.2.1
+Pillow==7.1.0
 progress==1.5
 pyasn1==0.4.8
 pyasn1-modules==0.2.7
